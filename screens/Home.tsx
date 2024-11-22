@@ -21,8 +21,12 @@ const Home = () => {
     async function getData() {
         const result = await db.getAllAsync<Transaction>('SELECT * FROM Transactions ORDER BY date DESC;');
         setTransactions(result);
-        console.log(result);
+
+
+        const categoriesResult = await db.getAllAsync<Category>('SELECT * FROM Categories;');
+        setCategories(categoriesResult);
     }
+
 
     async function deleteTransaction(id: number) {
         db.withTransactionAsync(async () => {
