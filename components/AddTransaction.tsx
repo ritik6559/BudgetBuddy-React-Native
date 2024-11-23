@@ -1,17 +1,15 @@
-import { Transaction } from "../types";
 import * as React from "react";
-import { useSQLiteContext } from "expo-sqlite";
-import { Category } from "../types";
 import { Button, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import Card from "./ui/Card";
-
+import SegmentedControl from "@react-native-segmented-control/segmented-control";
+import { useSQLiteContext } from "expo-sqlite";
+import { Category, Transaction } from "../types";
 
 export default function AddTransaction({
     insertTransaction,
 }: {
-    insertTransaction(Transaction: Transaction): Promise<void>;
+    insertTransaction(transaction: Transaction): Promise<void>;
 }) {
     const [isAddingTransaction, setIsAddingTransaction] =
         React.useState<boolean>(false);
@@ -40,31 +38,41 @@ export default function AddTransaction({
     }
 
     async function handleSave() {
-        console.log({
-            amount: Number(amount),
-            description,
-            category_id: categoryId,
-            date: new Date().getTime() / 1000,
-            type: category as "Expense" | "Income",
-        });
+        try {
 
-        // @ts-ignore
+            const now = new Date();
+            const transactionData = {
+                amount: Number(amount),
+                description,
+                category_id: categoryId,
+                date: Math.floor(Date.now() / 1000), // Current Unix timestamp in seconds
+                type: category as "Expense" | "Income",
+            };
 
-        await insertTransaction({
-            amount: Number(amount),
-            description,
-            category_id: categoryId,
-            date: new Date().getTime() / 1000,
-            type: category as "Expense" | "Income",
-        });
-        setAmount("");
-        setDescription("");
-        setCategory("Expense");
-        setCategoryId(1);
-        setCurrentTab(0);
-        setIsAddingTransaction(false);
+            console.log('Saving transaction:', transactionData);
+
+            // @ts-ignore
+            await insertTransaction({
+                amount: Number(amount),
+                description,
+                category_id: categoryId,
+                // Convert to timestamp - using getTime() gives milliseconds, so divide by 1000 for seconds
+                date: Math.floor(now.getTime()),  // Remove the /1000 to keep millisecond precision
+                type: category as "Expense" | "Income",
+            });
+
+            // Reset form after successful save
+            setAmount("");
+            setDescription("");
+            setCategory("Expense");
+            setCategoryId(1);
+            setCurrentTab(0);
+            setIsAddingTransaction(false);
+        } catch (error) {
+            console.error('Error saving transaction:', error);
+            // You might want to add error handling here, like showing a toast notification
+        }
     }
-
 
     return (
         <View style={{ marginBottom: 15 }}>
@@ -125,7 +133,6 @@ export default function AddTransaction({
     );
 }
 
-
 function CategoryButton({
     id,
     title,
@@ -182,6 +189,7 @@ function AddButton({
                 height: 40,
                 flexDirection: "row",
                 alignItems: "center",
+
                 justifyContent: "center",
                 backgroundColor: "#007BFF20",
                 borderRadius: 15,

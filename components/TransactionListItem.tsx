@@ -20,11 +20,8 @@ export default function TransactionListItem({
   const categoryColor = categoryColors[categoryInfo?.name ?? "Default"];
   const emoji = categoryEmojies[categoryInfo?.name ?? "Default"];
   return (
-    <Card style={{
-        margin: 6
-    }}>
+    <Card>
       <View style={styles.row}>
-        
         <View style={{ width: "40%", gap: 3 }}>
           <Amount
             amount={transaction.amount}

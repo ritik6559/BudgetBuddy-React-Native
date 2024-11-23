@@ -4,16 +4,16 @@ export interface Transaction {
     amount: number;
     date: number;
     description: string;
-    type: 'Expense' | 'Income';
-}
-
-export interface Category {
+    type: "Expense" | "Income";
+  }
+  
+  export interface Category {
     id: number;
-    name: string,
-    type: "Expense" | "Income",
-}
-
-export interface TransactionsByMonth{
+    name: string;
+    type: "Expense" | "Income";
+  }
+  
+  export interface TransactionsByMonth {
     totalExpenses: number;
     totalIncome: number;
-}
+  }
