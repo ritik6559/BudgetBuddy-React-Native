@@ -45,7 +45,7 @@ export default function AddTransaction({
                 amount: Number(amount),
                 description,
                 category_id: categoryId,
-                date: Math.floor(Date.now() / 1000), // Current Unix timestamp in seconds
+                date: Math.floor(Date.now() / 1000),
                 type: category as "Expense" | "Income",
             };
 
@@ -56,12 +56,10 @@ export default function AddTransaction({
                 amount: Number(amount),
                 description,
                 category_id: categoryId,
-                // Convert to timestamp - using getTime() gives milliseconds, so divide by 1000 for seconds
-                date: Math.floor(now.getTime()),  // Remove the /1000 to keep millisecond precision
+                date: Math.floor(now.getTime()),  
                 type: category as "Expense" | "Income",
             });
 
-            // Reset form after successful save
             setAmount("");
             setDescription("");
             setCategory("Expense");
@@ -70,7 +68,6 @@ export default function AddTransaction({
             setIsAddingTransaction(false);
         } catch (error) {
             console.error('Error saving transaction:', error);
-            // You might want to add error handling here, like showing a toast notification
         }
     }
 
@@ -84,7 +81,6 @@ export default function AddTransaction({
                             style={{ fontSize: 32, marginBottom: 15, fontWeight: "bold" }}
                             keyboardType="numeric"
                             onChangeText={(text) => {
-                                // Remove any non-numeric characters before setting the state
                                 const numericValue = text.replace(/[^0-9.]/g, "");
                                 setAmount(numericValue);
                             }}
