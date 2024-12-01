@@ -146,7 +146,6 @@ export default function SummaryChart() {
         animationDuration={300}
         rulesColor={"#00000020"}
         backgroundColor={"white"}
-        showGradient
         gradientColor={"blue"}
         barInnerComponent={() => (
           <View style={{ backgroundColor: "pink", height: "100%" }} />
